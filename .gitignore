@@ -32,7 +32,7 @@ examples/*/test_snapshots/
 *.so
 *.dylib
 *.dll
-examples/*/target/
+**/target/
 
 # Claude plans
 .claude/
