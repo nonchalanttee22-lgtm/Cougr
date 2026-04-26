@@ -24,8 +24,7 @@ Thumbs.db
 *.wasm
 
 # Test artifacts
-test_snapshots/
-examples/*/test_snapshots/
+**/test_snapshots/
 
 # Build artifacts
 *.o
