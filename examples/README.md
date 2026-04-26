@@ -7,21 +7,21 @@ This directory contains standalone game projects built on top of `cougr-core`. T
 
 The catalog is expected to grow over time. Documentation in this directory should therefore avoid hard dependencies on exact counts or one-off example narratives.
 
+## Example Quality Standard
+
+Every example in this directory is expected to meet a documented quality bar. See [EXAMPLE_STANDARD.md](./EXAMPLE_STANDARD.md) for the full standard, including dependency requirements, module structure, README expectations, testing categories, and the checklist used by cleanup issues.
+
 ## How To Use The Examples
 
-Each example lives in its own directory and can be built independently. In most cases, the workflow is:
+Each example lives in its own directory and can be built independently. Every example must pass both of the following commands:
 
 ```bash
 cd examples/<example-name>
-cargo build
 cargo test
-```
-
-Some examples also include Soroban-specific build steps:
-
-```bash
 stellar contract build
 ```
+
+`stellar contract build` is required for all examples, not optional. An example that only passes `cargo build` is not a valid Soroban contract.
 
 ## Example Catalog
 
