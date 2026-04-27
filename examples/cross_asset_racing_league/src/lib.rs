@@ -2,13 +2,13 @@
 #![allow(deprecated)]
 
 use soroban_sdk::{
-    contract, contractimpl, panic_with_error, symbol_short, Address, BytesN, Env,
+    contract, contractimpl, panic_with_error, symbol_short, Address, BytesN, Env, Vec,
 };
 
-mod components;
-mod helpers;
-mod types;
-mod systems;
+pub mod components;
+pub mod helpers;
+pub mod types;
+pub mod systems;
 
 #[cfg(test)]
 mod test;

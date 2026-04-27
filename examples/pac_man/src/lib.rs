@@ -5,10 +5,10 @@ use cougr_core::component::Position as CorePosition;
 use cougr_core::event::Event;
 use cougr_core::component::ComponentTrait;
 
-mod components;
-mod types;
-mod maze;
-mod systems;
+pub mod components;
+pub mod types;
+pub mod maze;
+pub mod systems;
 
 #[cfg(test)]
 mod test;
