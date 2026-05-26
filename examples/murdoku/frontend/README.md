@@ -1,73 +1,64 @@
-# React + TypeScript + Vite
+# Murdoku Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The frontend for the Murdoku game is a Vite-powered React web application that provides the user interface for browsing, playing, and creating murder mystery logic puzzles.
 
-Currently, two official plugins are available:
+## Responsibilities & Scope
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### What the Frontend Does
+* **User Authentication**: Integrates the Pollar SDK (`@pollar/react`) for social/email login and embedded Stellar wallet provisioning.
+* **Session Key Management**: Requests matches/actions-scoped temporary session keys via `SessionBuilder` so players can play seamlessly without repeated wallet popups.
+* **UI Rendering**: Displays the game board, active suspects, clue card sidebar, puzzle catalog, and a step-by-step puzzle creator.
+* **Transaction Construction**: Formulates and broadcasts transaction payloads (e.g. calling `place_suspect` and `submit_puzzle`) using the Stellar/Soroban JS SDK.
 
-## React Compiler
+### What the Frontend Does NOT Do
+* **Game Logic Enforcement**: The frontend does not validate whether a suspect placement is valid, whether row/column duplicates exist, or whether clues are satisfied. All rules are strictly checked and enforced on-chain by the Soroban contract systems.
+* **Win/Solve Verification**: The frontend does not decide if a puzzle is solved. It queries the contract's `is_solved` state to determine whether to trigger a victory state.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Environment Variables
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Copy `.env.example` to `.env` in the frontend directory:
+```bash
+cp .env.example .env
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Define the following environment variables:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Variable | Description | Where to Get |
+|---|---|---|
+| `VITE_POLLAR_API_KEY` | The publishable API Key for the Pollar SDK. | Log into the [Pollar Developer Dashboard](https://dashboard.pollar.xyz), create a new application, and retrieve the public client key. |
+| `VITE_CONTRACT_ID` | The hex-encoded ID of the deployed Murdoku Soroban contract. | Obtained from your terminal output after executing `stellar contract deploy` on Stellar Testnet. |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## Development & Build Commands
+
+Run the following commands inside the `examples/murdoku/frontend` directory:
+
+```bash
+# Install dependencies
+npm install
+
+# Start local development server (with hot module replacement)
+npm run dev
+
+# Build the production bundle
+npm run build
+
+# Preview the production build locally
+npm run preview
 ```
+
+---
+
+## Targeting a Custom Contract
+
+To target a different instance of the Murdoku smart contract (for example, a locally running Soroban RPC node or your own deployed testnet instance):
+1. Deploy your contract instance using the `stellar contract deploy` CLI command.
+2. Open the frontend `.env` file.
+3. Update the `VITE_CONTRACT_ID` variable with your new contract address:
+   ```env
+   VITE_CONTRACT_ID=CC...
+   ```
+4. Restart your development server (`npm run dev`) or rebuild the bundle (`npm run build`) to apply the changes.
